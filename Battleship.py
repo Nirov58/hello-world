@@ -109,7 +109,11 @@ class Board:
             for i in range(-1, 2):
                 for j in range(-1, 2):
                     cell = Dot(dot.x + i, dot.y + j)
-                    if not self.out(cell) and cell not in contour_cells and cell not in ship.dots():
+                    if all([
+                        not self.out(cell),
+                        cell not in contour_cells,
+                        cell not in ship.dots()
+                    ]):
                         contour_cells.append(cell)
         return contour_cells
 
@@ -156,7 +160,6 @@ class Board:
 # Outer logic
 
 
-# noinspection PyUnresolvedReferences
 class Player:
     def __init__(self, their_board=None, enemy_board=None):
         self.their_board = their_board
@@ -170,10 +173,10 @@ class Player:
         try:
             self.enemy_board.shot(target)
         except BoardOutException:
-            print("Сюда стрелять нельзя!")
+            print("Нельзя стрелять за пределы поля!")
             return True
         except DoubleShotException:
-            print("Вы уже стреляли сюда!")
+            print("Нельзя стрелять по одной клетке дважды!")
             return True
         if self.enemy_board.cells[target.y][target.x][0] == "X":
             return True
@@ -230,7 +233,7 @@ class Game:
                     attempts += 1
                 else:
                     break
-                if attempts == 10000:
+                if attempts == 2000:
                     board.cells = copy.deepcopy(field_0)
                     board.ships = []
                     break
