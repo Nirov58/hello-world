@@ -86,9 +86,6 @@ class Board:
         self.hid = hid
         self.active_ships = active_ships
 
-    def set_cells(self, cells):
-        self.cells = cells
-
     def add_ship(self, ship):
         if any([
             ship.length == 3 and (ship.bow.x > 4 or ship.bow.y > 4),
